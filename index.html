@@ -3,12 +3,45 @@
   <head>
     <meta charset="utf-8">
     <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-    <script src="https://api.trello.com/1/client.js?key=dbdd3808d314c362931b7c8918766c03"></script>
-    <script src="./index.js" type="text/javascript"></script>
+    <script src="http://api.trello.com/1/client.js?key=dbdd3808d314c362931b7c8918766c03"></script>
+    <!-- <script src="./index.js" type="text/javascript"></script> -->
     <title>Trello Auth</title>
   </head>
   <body>
     <button onclick="authorizeTrello()">Authorize Trello</button>
+    <button onclick="getBoards()">Get Boards</button>
 
+    <script>
+      var authenticationSuccess = function() { console.log('Successful authentication', Trello); };
+      var authenticationFailure = function() { console.log('Failed authentication'); };
+
+      var success = function(msg) {
+        console.log(msg);
+      };
+
+      var error = function(msg) {
+        console.log(msg);
+      };
+
+      // Manually set token here from response because wouldn't work without https server
+      Trello.setToken('ec20158f759df8f6c9a8b48a48ef9831fdd476f79e051b24bee11a449ba87e68');
+
+      function authorizeTrello() {
+        Trello.authorize({
+        type: 'popup',
+        name: 'Getting Started Application',
+        scope: {
+          read: 'true',
+          write: 'true' },
+        expiration: 'never',
+        success: authenticationSuccess,
+        error: authenticationFailure
+      });
+      }
+
+      function getBoards() {
+        Trello.get('/member/me/boards', success, error);
+      }
+  </script>
   </body>
 </html>
